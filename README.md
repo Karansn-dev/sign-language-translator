@@ -38,10 +38,7 @@ Delete:
 - `mp_env/` (duplicate environment)
 - `myenv/` (duplicate environment)
 - Any extra env folder if you keep `backend/.venv`
-- `__pycache__/` folders
-- C/C++ VS Code files if not needed for this Python project:
-  - `.vscode/c_cpp_properties.json`
-  - `.vscode/launch.json`
+- `__pycache__/` folders 
 
 ## Essential Environment
 

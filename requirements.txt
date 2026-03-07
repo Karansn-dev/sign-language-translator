@@ -3,3 +3,7 @@ opencv-python
 mediapipe
 scikit-learn
 tensorflow
+fastapi
+uvicorn[standard]
+websockets
+python-multipart
