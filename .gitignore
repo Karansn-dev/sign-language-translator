@@ -45,3 +45,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# LSTM training data
+backend/LSTM_DATA/
+*.npy
+
+# Binary lockfile
+frontend/bun.lockb
