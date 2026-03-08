@@ -9,12 +9,12 @@ import { useAuth } from "@/hooks/use-auth";
 const navItems = [
   { label: "Features", href: "/#features" },
   { label: "How it Works", href: "/#how-it-works" },
-  { label: "Translator", href: "/translator" },
+  { label: "Pricing", href: "/#pricing" },
   { label: "Learn", href: "/learn" },
   { label: "Community", href: "/community" },
 ];
 
-const sectionNavIds = ["features", "how-it-works"];
+const sectionNavIds = ["features", "how-it-works", "pricing"];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

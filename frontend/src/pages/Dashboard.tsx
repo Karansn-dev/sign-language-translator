@@ -3,72 +3,74 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import {
   Camera, Mic, BookOpen, Users, ArrowRight, Clock,
-  CheckCircle2, MessageSquare, Award, Settings, Bell,
-  Zap, TrendingUp, History,
+  CheckCircle2, Award, HandMetal, Timer, Trophy,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 
-/* ── Action Cards ── */
-const actionCards = [
+/* ── Stats ── */
+const stats = [
+  { label: "Signs Learned", value: 48, icon: HandMetal, color: "text-blue-500", bg: "bg-blue-500/10" },
+  { label: "Achievements", value: 12, icon: Trophy, color: "text-amber-500", bg: "bg-amber-500/10" },
+  { label: "Minutes Practiced", value: 320, icon: Timer, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+];
+
+/* ── Feature Cards ── */
+const featureCards = [
   {
     icon: Camera,
-    title: "Start Translating",
-    description: "Engage in real-time conversations with our advanced ISL translation.",
-    cta: "Launch Translator",
+    title: "Sign Translation",
+    description: "Translate sign language gestures into text and speech in real time using your camera.",
+    cta: "Open Camera",
     href: "/translator",
-    gradient: "from-bg-gradient-to-r from-pink-300 via-purple-500 to-indigo-700",
+    gradient: "from-blue-600 to-indigo-500",
     glow: "group-hover:shadow-[0_8px_40px_-8px_rgba(59,130,246,0.4)]",
-    iconBg: "bg-white/20",
   },
   {
     icon: Mic,
-    title: "Start Talking",
-    description: "Convert your speech into ISL gestures instantly.",
-    cta: "Open Talk-to-Sign",
+    title: "Speech to Sign",
+    description: "Speak naturally and convert your words into animated sign language gestures instantly.",
+    cta: "Start Speaking",
     href: "/speech-to-sign",
-    gradient: "from-purple-500 to-violet-400",
+    gradient: "from-violet-600 to-purple-400",
     glow: "group-hover:shadow-[0_8px_40px_-8px_rgba(139,92,246,0.4)]",
-    iconBg: "bg-white/20",
   },
   {
     icon: BookOpen,
-    title: "Continue Your Learning Journey",
-    description: "Master ISL with interactive lessons and personalized feedback.",
-    cta: "Start Learning Now",
+    title: "Learning Hub",
+    description: "Interactive lessons, quizzes, and daily challenges to master Indian Sign Language.",
+    cta: "Continue Learning",
     href: "/learn",
-    gradient: "from-blue-600 to-teal-400",
+    meta: "24 lessons completed",
+    gradient: "from-teal-500 to-cyan-400",
     glow: "group-hover:shadow-[0_8px_40px_-8px_rgba(20,184,166,0.4)]",
-    iconBg: "bg-white/20",
   },
   {
     icon: Users,
-    title: "Join the Community",
-    description: "Connect with learners, share experiences, and grow together.",
+    title: "Community",
+    description: "Connect with other learners, share your progress, and join discussion groups.",
     cta: "Explore Community",
     href: "/community",
-    gradient: "from-orange-400 to-yellow-300",
+    meta: "1.2k active members",
+    gradient: "from-orange-500 to-amber-400",
     glow: "group-hover:shadow-[0_8px_40px_-8px_rgba(251,146,60,0.4)]",
-    iconBg: "bg-white/20",
   },
 ];
 
-/* ── Mock data ── */
-const recentTranslations = [
-  { sentence: "Hello, how are you?", time: "2 hours ago", accuracy: 96 },
-  { sentence: "Thank you very much", time: "5 hours ago", accuracy: 92 },
-  { sentence: "Nice to meet you", time: "1 day ago", accuracy: 89 },
-  { sentence: "Good morning everyone", time: "2 days ago", accuracy: 94 },
+/* ── Recent Activity ── */
+const recentActivity = [
+  { action: "Completed lesson: Common Greetings", time: "25 min ago", icon: CheckCircle2, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+  { action: "Translated 14 signs in a live session", time: "2 hours ago", icon: Camera, color: "text-blue-500", bg: "bg-blue-500/10" },
+  { action: "Earned achievement: 7-Day Streak", time: "5 hours ago", icon: Award, color: "text-amber-500", bg: "bg-amber-500/10" },
+  { action: "Joined the community group: ISL Beginners", time: "1 day ago", icon: Users, color: "text-violet-500", bg: "bg-violet-500/10" },
+  { action: "Completed quiz: Numbers & Counting", time: "2 days ago", icon: CheckCircle2, color: "text-emerald-500", bg: "bg-emerald-500/10" },
 ];
 
-const communityActivity = [
-  { user: "Priya S.", action: "completed ISL Greetings course", icon: Award, time: "10 min ago" },
-  { user: "Arjun K.", action: "shared a learning story", icon: MessageSquare, time: "30 min ago" },
-  { user: "Meera R.", action: "answered a community question", icon: CheckCircle2, time: "1 hr ago" },
-  { user: "Rahul D.", action: "reached a 7-day streak", icon: Zap, time: "2 hrs ago" },
-  { user: "Ananya P.", action: "completed Numbers & Counting", icon: Award, time: "3 hrs ago" },
-];
+/* ── Daily practice mock ── */
+const dailyGoal = 20;
+const dailyDone = 15;
+const dailyPercent = Math.round((dailyDone / dailyGoal) * 100);
 
 const fade = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -83,42 +85,72 @@ export default function DashboardPage() {
     <div className="min-h-screen">
       <Navbar />
       <main className="pt-24 pb-16">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-6 max-w-6xl">
 
           {/* ── Welcome Section ── */}
-          <motion.div {...fade(0)} className="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <div>
-              <h1 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-1">
-                Welcome, {user?.name || "User"}! 👋
-              </h1>
-              <p className="text-muted-foreground text-base md:text-lg">
-                Continue your journey towards inclusive communication.
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="icon" className="rounded-xl">
-                <Bell size={18} />
-              </Button>
-              <Button variant="outline" size="icon" className="rounded-xl">
-                <Settings size={18} />
-              </Button>
-            </div>
+          <motion.div {...fade(0)} className="mb-8">
+            <h1 className="font-display font-bold text-3xl md:text-4xl text-foreground mb-1">
+              Welcome back, {user?.name || "User"}! 👋
+            </h1>
+            <p className="text-muted-foreground text-base md:text-lg">
+              Every sign you learn brings you closer to someone's world. Keep going!
+            </p>
           </motion.div>
 
-          {/* ── Main Action Cards (2×2) ── */}
+          {/* ── Stat Cards ── */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                {...fade(0.05 + i * 0.06)}
+                className="rounded-2xl glass-card-static p-5 flex items-center gap-4"
+              >
+                <div className={`w-12 h-12 rounded-xl ${stat.bg} flex items-center justify-center shrink-0`}>
+                  <stat.icon size={22} className={stat.color} />
+                </div>
+                <div>
+                  <p className="font-display font-bold text-2xl text-foreground">{stat.value}</p>
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* ── Daily Practice Progress ── */}
+          <motion.div {...fade(0.25)} className="rounded-2xl glass-card-static p-5 mb-8">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-display font-semibold text-base text-foreground">Daily Practice</h2>
+              <span className="text-sm text-muted-foreground">
+                {dailyDone} of {dailyGoal} minutes
+              </span>
+            </div>
+            <div className="w-full h-3 rounded-full bg-muted overflow-hidden">
+              <motion.div
+                className="h-full rounded-full bg-gradient-to-r from-primary to-primary-glow"
+                initial={{ width: 0 }}
+                animate={{ width: `${dailyPercent}%` }}
+                transition={{ duration: 1, ease: "easeOut", delay: 0.4 }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              {dailyPercent}% completed — {dailyGoal - dailyDone} more minutes to hit today's goal!
+            </p>
+          </motion.div>
+
+          {/* ── Feature Cards (2×2) ── */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-            {actionCards.map((card, i) => (
-              <motion.div key={card.title} {...fade(0.08 + i * 0.08)}>
-                <Link to={card.href} className="block group">
+            {featureCards.map((card, i) => (
+              <motion.div key={card.title} {...fade(0.3 + i * 0.08)}>
+                <div className="block group h-full">
                   <div
-                    className={`relative rounded-2xl bg-gradient-to-br ${card.gradient} p-6 min-h-[180px] flex flex-col justify-between overflow-hidden transition-all duration-400 ${card.glow}`}
+                    className={`relative rounded-2xl bg-gradient-to-br ${card.gradient} p-6 min-h-[220px] flex flex-col justify-between overflow-hidden transition-all duration-300 ${card.glow}`}
                   >
                     {/* Decorative circles */}
                     <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 blur-sm" />
                     <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-white/10 blur-sm" />
 
                     <div className="relative z-10">
-                      <div className={`w-12 h-12 rounded-xl ${card.iconBg} backdrop-blur-sm flex items-center justify-center mb-4`}>
+                      <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4">
                         <card.icon size={24} className="text-white" />
                       </div>
                       <h3 className="font-display font-bold text-xl text-white mb-1.5">
@@ -127,124 +159,49 @@ export default function DashboardPage() {
                       <p className="text-sm text-white/80 leading-relaxed max-w-xs">
                         {card.description}
                       </p>
+                      {card.meta && (
+                        <p className="text-xs text-white/60 mt-2">{card.meta}</p>
+                      )}
                     </div>
 
                     <div className="relative z-10 mt-4">
-                      <span className="inline-flex items-center gap-2 text-sm font-semibold text-white bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl group-hover:bg-white/30 transition-colors">
-                        {card.cta}
-                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                      </span>
+                      <Link to={card.href}>
+                        <span className="inline-flex items-center gap-2 text-sm font-semibold text-white bg-white/20 backdrop-blur-sm px-4 py-2 rounded-xl group-hover:bg-white/30 transition-colors">
+                          {card.cta}
+                          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </Link>
                     </div>
                   </div>
-                </Link>
+                </div>
               </motion.div>
             ))}
           </div>
 
-          {/* ── Bottom Grid: Translations + Community + Quick Settings ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-            {/* Recent Translations (spans 2 cols on lg) */}
-            <motion.div {...fade(0.5)} className="lg:col-span-2 rounded-2xl glass-card-static p-6">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="font-display font-semibold text-lg text-foreground flex items-center gap-2">
-                  <History size={18} className="text-primary" />
-                  Recent Translations
-                </h2>
-                <Link to="/translator" className="text-xs text-primary hover:underline">
-                  View All
-                </Link>
-              </div>
-
-              <div className="space-y-3">
-                {recentTranslations.map((item, i) => (
-                  <motion.div
-                    key={i}
-                    {...fade(0.55 + i * 0.06)}
-                    className="flex items-center justify-between rounded-xl border border-border bg-card/50 p-4 hover:bg-card transition-colors"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">
-                        "{item.sentence}"
-                      </p>
-                      <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                        <Clock size={12} /> {item.time}
-                      </p>
-                    </div>
-                    <div className="ml-4 flex items-center gap-1.5 shrink-0">
-                      <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-gradient-to-r from-primary to-primary-glow"
-                          style={{ width: `${item.accuracy}%` }}
-                        />
-                      </div>
-                      <span className="text-xs font-semibold text-foreground w-8 text-right">
-                        {item.accuracy}%
-                      </span>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Right Column: Community + Quick Settings */}
-            <div className="space-y-6">
-              {/* Community Activity */}
-              <motion.div {...fade(0.6)} className="rounded-2xl glass-card-static p-6">
-                <h2 className="font-display font-semibold text-lg text-foreground flex items-center gap-2 mb-4">
-                  <TrendingUp size={18} className="text-primary" />
-                  Community Activity
-                </h2>
-                <div className="space-y-3">
-                  {communityActivity.map((item, i) => (
-                    <div key={i} className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                        <item.icon size={14} className="text-primary" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm text-foreground leading-snug">
-                          <span className="font-semibold">{item.user}</span>{" "}
-                          <span className="text-muted-foreground">{item.action}</span>
-                        </p>
-                        <p className="text-[11px] text-muted-foreground mt-0.5">{item.time}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <Link
-                  to="/community"
-                  className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-4"
+          {/* ── Recent Activity ── */}
+          <motion.div {...fade(0.6)} className="rounded-2xl glass-card-static p-6">
+            <h2 className="font-display font-semibold text-lg text-foreground flex items-center gap-2 mb-5">
+              <Clock size={18} className="text-primary" />
+              Recent Activity
+            </h2>
+            <div className="space-y-4">
+              {recentActivity.map((item, i) => (
+                <motion.div
+                  key={i}
+                  {...fade(0.65 + i * 0.05)}
+                  className="flex items-start gap-4"
                 >
-                  See All Activity <ArrowRight size={12} />
-                </Link>
-              </motion.div>
-
-              {/* Quick Settings */}
-              <motion.div {...fade(0.7)} className="rounded-2xl glass-card-static p-6">
-                <h2 className="font-display font-semibold text-lg text-foreground flex items-center gap-2 mb-4">
-                  <Settings size={18} className="text-primary" />
-                  Quick Settings
-                </h2>
-                <div className="space-y-2">
-                  {[
-                    { label: "Camera Preferences", href: "/translator" },
-                    { label: "Language Settings", href: "/speech-to-sign" },
-                    { label: "Notification Preferences", href: "#" },
-                    { label: "Manage Account", href: "#" },
-                  ].map((link) => (
-                    <Link
-                      key={link.label}
-                      to={link.href}
-                      className="flex items-center justify-between rounded-xl border border-border bg-card/50 px-4 py-3 text-sm text-foreground hover:bg-card transition-colors group"
-                    >
-                      {link.label}
-                      <ArrowRight size={14} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
-                    </Link>
-                  ))}
-                </div>
-              </motion.div>
+                  <div className={`w-9 h-9 rounded-xl ${item.bg} flex items-center justify-center shrink-0 mt-0.5`}>
+                    <item.icon size={16} className={item.color} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-foreground">{item.action}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{item.time}</p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </main>
