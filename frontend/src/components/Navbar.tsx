@@ -1,9 +1,10 @@
 import { useState, useEffect, MouseEvent } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut, LayoutDashboard, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useAuth } from "@/hooks/use-auth";
 
 const navItems = [
   { label: "Features", href: "/#features" },
@@ -19,7 +20,10 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [profileOpen, setProfileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const updateActiveSection = () => {
     if (location.pathname !== "/") {
@@ -147,12 +151,63 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
-          <Link to="/auth">
-            <Button variant="ghost" size="sm">Sign In</Button>
-          </Link>
-          <Link to="/translator">
-            <Button variant="hero" size="sm">Start Translating</Button>
-          </Link>
+          {isAuthenticated ? (
+            <div className="relative">
+              <button
+                onClick={() => setProfileOpen((p) => !p)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-primary/5 transition-colors"
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center text-white font-display font-bold text-sm">
+                  {user!.name.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm font-medium text-foreground max-w-[100px] truncate">
+                  {user!.name}
+                </span>
+              </button>
+              <AnimatePresence>
+                {profileOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute right-0 mt-2 w-48 rounded-xl glass-surface shadow-card border border-border p-1.5 z-50"
+                  >
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-foreground rounded-lg hover:bg-primary/10 transition-colors"
+                    >
+                      <LayoutDashboard size={15} /> Dashboard
+                    </Link>
+                    <Link
+                      to="/profile"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-foreground rounded-lg hover:bg-primary/10 transition-colors"
+                    >
+                      <User size={15} /> Profile
+                    </Link>
+                    <div className="h-px bg-border my-1" />
+                    <button
+                      onClick={() => { logout(); setProfileOpen(false); navigate("/"); }}
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-destructive rounded-lg hover:bg-destructive/10 transition-colors w-full"
+                    >
+                      <LogOut size={15} /> Sign Out
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <Link to="/auth">
+              <Button variant="ghost" size="sm">Sign In</Button>
+            </Link>
+          )}
+          {!isAuthenticated && (
+            <Link to="/translator">
+              <Button variant="hero" size="sm">Start Translating</Button>
+            </Link>
+          )}
         </div>
 
         <button
@@ -196,12 +251,31 @@ export default function Navbar() {
                 <ThemeToggle />
               </div>
               <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-border">
-                <Link to="/auth">
-                  <Button variant="outline" className="w-full">Sign In</Button>
-                </Link>
-                <Link to="/translator">
-                  <Button variant="hero" className="w-full">Start Translating</Button>
-                </Link>
+                {isAuthenticated ? (
+                  <>
+                    <Link to="/dashboard">
+                      <Button variant="outline" className="w-full gap-2">
+                        <LayoutDashboard size={15} /> Dashboard
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      className="w-full gap-2 text-destructive hover:text-destructive"
+                      onClick={() => { logout(); navigate("/"); }}
+                    >
+                      <LogOut size={15} /> Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <Link to="/auth">
+                    <Button variant="outline" className="w-full">Sign In</Button>
+                  </Link>
+                )}
+                {!isAuthenticated && (
+                  <Link to="/translator">
+                    <Button variant="hero" className="w-full">Start Translating</Button>
+                  </Link>
+                )}
               </div>
             </nav>
           </motion.div>
