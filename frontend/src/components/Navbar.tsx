@@ -204,7 +204,7 @@ export default function Navbar() {
             </Link>
           )}
           {!isAuthenticated && (
-            <Link to="/translator">
+            <Link to="/auth">
               <Button variant="hero" size="sm">Start Translating</Button>
             </Link>
           )}
@@ -272,7 +272,7 @@ export default function Navbar() {
                   </Link>
                 )}
                 {!isAuthenticated && (
-                  <Link to="/translator">
+                  <Link to="/auth">
                     <Button variant="hero" className="w-full">Start Translating</Button>
                   </Link>
                 )}

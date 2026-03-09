@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Play, Sparkles, Eye } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function HeroSection() {
+  const { isAuthenticated } = useAuth();
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -66,7 +68,7 @@ export default function HeroSection() {
             transition={{ delay: 0.45, duration: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <Link to="/translator">
+            <Link to={isAuthenticated ? "/translator" : "/auth"}>
               <Button variant="hero" size="xl" className="gap-2.5">
                 Start Translating
                 <ArrowRight size={18} />
